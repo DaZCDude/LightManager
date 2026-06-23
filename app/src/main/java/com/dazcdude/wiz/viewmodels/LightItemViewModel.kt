@@ -37,7 +37,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
 
             val json = """
         {
-            "method":"setPilot",
+            "method":"setState",
             "params":{
                 "state":true
             }
@@ -53,7 +53,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
 
             val json = """
         {
-            "method":"setPilot",
+            "method":"setState",
             "params":{
                 "state":false
             }
