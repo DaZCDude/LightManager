@@ -22,6 +22,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,9 +37,11 @@ import com.dazcdude.wiz.viewmodels.LightItemViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) {
-    var lightOn by remember { mutableStateOf(true) }
     var showSheet by remember { mutableStateOf(false) }
     var brightnessSliderPosition by remember { mutableFloatStateOf(0f) }
+
+    val lightData by lightItemViewModel.lightData.collectAsState()
+    var lightOn = lightData[lightObject.ip]?.state ?: false
 
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true

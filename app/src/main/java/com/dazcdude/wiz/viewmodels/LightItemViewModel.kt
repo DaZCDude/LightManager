@@ -2,6 +2,7 @@ package com.dazcdude.wiz.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dazcdude.wiz.LightData
 import com.dazcdude.wiz.LightObject
 import com.dazcdude.wiz.repositories.LightRepository
 import kotlinx.coroutines.Dispatchers
@@ -15,12 +16,28 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
     private val _lights = MutableStateFlow<List<LightObject>>(emptyList())
     val lights: StateFlow<List<LightObject>> = _lights
 
+    private val _lightData = MutableStateFlow<Map<String, LightData>>(emptyMap())
+
+    val lightData: StateFlow<Map<String, LightData>> = _lightData
+
     init {
         refreshLights()
     }
 
     private fun refreshLights() {
         _lights.value = lightRepository.getSavedLights()
+
+        viewModelScope.launch {
+            val dataMap = mutableMapOf<String, LightData>()
+
+            for (light in _lights.value) {
+                lightRepository.getLightData(light.ip)?.let { data ->
+                    dataMap[light.ip] = data
+                }
+            }
+
+            _lightData.value = dataMap
+        }
     }
 
     fun isValidIp(ip: String): Boolean {
