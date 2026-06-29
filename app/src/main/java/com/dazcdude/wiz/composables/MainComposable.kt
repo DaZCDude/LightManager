@@ -82,10 +82,10 @@ fun MainComposable(lightItemViewModel: LightItemViewModel) {
                             value = saveIP,
                             onValueChange = {saveIP = it},
                             singleLine = true,
-                            isError = !ipValid && saveIP.isNotBlank(),
+                            isError = !ipValid,
                             supportingText = {
-                                if (!ipValid && saveIP.isNotBlank()) {
-                                    Text("Invalid IP Address")
+                                if (!ipValid) {
+                                    Text("Invalid IP Address!")
                                 }
                             })
 
@@ -107,7 +107,7 @@ fun MainComposable(lightItemViewModel: LightItemViewModel) {
 
                             showSaveDialog = false
                         },
-                        enabled = lightItemViewModel.isValidIp(saveIP)
+                        enabled = lightItemViewModel.isValidIp(saveIP) && saveDisplayName.isNotBlank()
                     ) {
                         Text("Save")
                     }

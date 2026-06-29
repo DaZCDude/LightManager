@@ -108,7 +108,7 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(8.dp)) {
+                    .padding(16.dp)) {
                 Icon(painter = painterResource(R.drawable.ic_brightness),
                     contentDescription = "Brightness"
                 )
