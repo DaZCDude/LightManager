@@ -1,6 +1,8 @@
 package com.dazcdude.wiz
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,8 +25,12 @@ class MainActivity : ComponentActivity()
 
         setContent {
             WiZManagerTheme {
-                MainComposable(lightItemViewModel)
+                MainComposable(lightItemViewModel, ::openWifiSettings)
             }
         }
+    }
+
+    private fun openWifiSettings() {
+        startActivity(Intent(Settings.Panel.ACTION_WIFI))
     }
 }

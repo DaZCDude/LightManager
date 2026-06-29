@@ -1,5 +1,10 @@
 package com.dazcdude.wiz.composables
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,11 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.dazcdude.wiz.viewmodels.LightItemViewModel
 
 @Composable
-fun MainComposable(lightItemViewModel: LightItemViewModel) {
+fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -> Unit) {
     val lights by lightItemViewModel.lights.collectAsState()
 
     var showSaveDialog by remember { mutableStateOf(false) }
@@ -37,6 +44,25 @@ fun MainComposable(lightItemViewModel: LightItemViewModel) {
     var saveDisplayName by remember { mutableStateOf("") }
 
     val ipValid = saveIP.isBlank() || lightItemViewModel.isValidIp(saveIP)
+
+    val wifiEnabled = rememberWifiEnabled()
+
+    if (!wifiEnabled) {
+        AlertDialog(
+            onDismissRequest = {},
+            confirmButton = {
+                TextButton(onClick = openWifiSettings) {
+                    Text("Enable Wi-Fi")
+                }
+            },
+            title = {
+                Text("No Wi-Fi")
+            },
+            text = {
+                Text("The app uses Wi-Fi to call light commands.")
+            }
+        )
+    }
 
     Scaffold(
 //        bottomBar = {
@@ -124,4 +150,35 @@ fun MainComposable(lightItemViewModel: LightItemViewModel) {
             )
         }
     }
+}
+
+@Composable
+fun rememberWifiEnabled(): Boolean {
+    val context = LocalContext.current
+    val wifi = remember {
+        context.getSystemService(WifiManager::class.java)
+    }
+
+    var enabled by remember {
+        mutableStateOf(wifi?.isWifiEnabled == true)
+    }
+
+    DisposableEffect(Unit) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                enabled = wifi?.isWifiEnabled == true
+            }
+        }
+
+        context.registerReceiver(
+            receiver,
+            IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        )
+
+        onDispose {
+            context.unregisterReceiver(receiver)
+        }
+    }
+
+    return enabled
 }
