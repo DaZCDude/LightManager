@@ -65,25 +65,22 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
                 modifier = Modifier.padding(16.dp, 8.dp)
             ) {
                 Text(
-                    text = if (lightObject.displayName.isBlank())
-                        lightObject.ip
-                    else
-                        lightObject.displayName
+                    text = lightObject.displayName,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
-                if (lightObject.displayName.isNotBlank()) {
-                    Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(1f))
 
-                    Surface(
-                        tonalElevation = 10.dp,
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(
-                            text = "IP: ${lightObject.ip}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(16.dp, 8.dp))
-                    }
+                Surface(
+                    tonalElevation = 10.dp,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "IP: ${lightObject.ip}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(16.dp, 8.dp))
                 }
             }
 
@@ -138,18 +135,15 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
     ) {
         Column {
             Text(
-                text = if (lightObject.displayName.isBlank())
-                    lightObject.ip
-                else
-                    lightObject.displayName
+                text = lightObject.displayName,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            if (lightObject.displayName.isNotBlank()) {
-                Text(
-                    text = lightObject.ip,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
+            Text(
+                text = lightObject.ip,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         Spacer(modifier = Modifier.weight(1f))
