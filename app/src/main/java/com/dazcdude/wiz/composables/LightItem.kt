@@ -129,46 +129,36 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
         }
     }
 
-    Surface(
-        tonalElevation = 2.dp,
-        shadowElevation = 2.dp,
-        shape = RoundedCornerShape(12.dp),
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    showSheet = true
-                }
-            )
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .combinedClickable(onClick = {showSheet = true})
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
+        Column {
+            Text(
+                text = if (lightObject.displayName.isBlank())
+                    lightObject.ip
+                else
+                    lightObject.displayName
+            )
+
+            if (lightObject.displayName.isNotBlank()) {
                 Text(
-                    text = if (lightObject.displayName.isBlank())
-                        lightObject.ip
-                    else
-                        lightObject.displayName
-                )
-
-                if (lightObject.displayName.isNotBlank()) {
-                    Text(
-                        text = lightObject.ip,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+                    text = lightObject.ip,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            LightOffButton { lightItemViewModel.turnBulbOff(lightObject.ip) }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            LightOnButton { lightItemViewModel.turnBulbOn(lightObject.ip) }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        LightOffButton { lightItemViewModel.turnBulbOff(lightObject.ip) }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        LightOnButton { lightItemViewModel.turnBulbOn(lightObject.ip) }
     }
 }
 
