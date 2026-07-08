@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dazcdude.wiz.LightData
 import com.dazcdude.wiz.LightObject
 import com.dazcdude.wiz.repositories.LightRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,12 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
 
     init {
         refreshLights()
+    }
+
+    fun searchLight() {
+        CoroutineScope(Dispatchers.IO).launch {
+            lightRepository.searchLight()
+        }
     }
 
     private fun refreshLights() {

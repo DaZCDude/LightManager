@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -69,8 +71,13 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { showSaveDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                FloatingActionButton(onClick = { lightItemViewModel.searchLight() }) {
+                    Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+                }
+                FloatingActionButton(onClick = { showSaveDialog = true }) {
+                    Icon(Icons.Default.Add, contentDescription = "Add")
+                }
             }
         }
     ) { innerPadding ->

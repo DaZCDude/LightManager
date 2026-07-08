@@ -1,19 +1,22 @@
 package com.dazcdude.wiz.repositories
 
 import android.content.SharedPreferences
+import android.net.wifi.WifiManager
 import android.util.Log
+import androidx.core.content.edit
+import com.dazcdude.wiz.LightData
 import com.dazcdude.wiz.LightObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-import androidx.core.content.edit
-import com.dazcdude.wiz.LightData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import java.net.MulticastSocket
+import java.net.NetworkInterface
 import java.net.SocketTimeoutException
 
-class LightRepository(private val sharedPreferences: SharedPreferences) {
+class LightRepository(private val sharedPreferences: SharedPreferences, private val wifi: WifiManager) {
     fun sendUdp(message: String, bulbIp: String) {
         DatagramSocket().use { socket ->
             val address = InetAddress.getByName(bulbIp)
@@ -27,6 +30,76 @@ class LightRepository(private val sharedPreferences: SharedPreferences) {
 
             socket.send(packet)
         }
+    }
+
+    suspend fun searchLight(): List<String> = withContext(Dispatchers.IO) {
+
+        val results = mutableListOf<String>()
+
+        val message = """{"method":"getPilot","params":{}}""".toByteArray()
+
+        val group = InetAddress.getByName("224.0.0.1")
+
+        Log.d("Multicast Adress", getBroadcastAddress().hostAddress)
+
+        val multicastSocket = MulticastSocket(38899)
+
+        multicastSocket.joinGroup(group)
+
+        val datagramPacket = DatagramPacket(message, message.size, group, 38899)
+
+        multicastSocket.send(datagramPacket)
+
+        while (true) {
+            try {
+                val buffer = ByteArray(1024)
+                val response = DatagramPacket(buffer, buffer.size)
+                multicastSocket.receive(response)
+
+                Log.d("Direct MSG from" + response.address, String(response.data, 0, response.length))
+
+                if (String(response.data, 0, response.length) != "{\"method\":\"getPilot\",\"params\":{}}") {
+                    val light = LightObject(
+                        ip = response.address.hostAddress,
+                        displayName = response.address.hostName
+                    )
+                    saveLight(light)
+                }
+
+                results.add(
+                    String(response.data, 0, response.length)
+                )
+            } catch (e: SocketTimeoutException) {
+                break
+            }
+        }
+
+//        val receivedMessage = ByteArray(1000)
+//        val receiveDatagramPacket = DatagramPacket(receivedMessage, receivedMessage.size)
+//        multicastSocket.receive(receiveDatagramPacket)
+
+        Log.d("Multicast Messages", results.toString())
+
+        return@withContext results
+    }
+
+    fun getBroadcastAddress(): InetAddress {
+        val interfaces = NetworkInterface.getNetworkInterfaces()
+
+        while (interfaces.hasMoreElements()) {
+            val networkInterface = interfaces.nextElement()
+
+            if (!networkInterface.isUp || networkInterface.isLoopback) continue
+
+            networkInterface.interfaceAddresses.forEach { addr ->
+                val broadcast = addr.broadcast
+                if (broadcast != null) {
+                    return broadcast
+                }
+            }
+        }
+
+        throw IllegalStateException("No broadcast address found")
     }
 
     suspend fun getLightData(bulbIp: String): LightData? =
