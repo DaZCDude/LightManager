@@ -9,41 +9,38 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.InetAddress
 
 class LightItemViewModel(private val lightRepository: LightRepository) : ViewModel()
 {
-    private val _lights = MutableStateFlow<List<LightObject>>(emptyList())
-    val lights: StateFlow<List<LightObject>> = _lights
+    val lights = lightRepository.lights
+
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
 
     private val _lightData = MutableStateFlow<Map<String, LightData>>(emptyMap())
-
     val lightData: StateFlow<Map<String, LightData>> = _lightData
 
     init {
-        refreshLights()
-    }
-
-    fun searchLight() {
-        CoroutineScope(Dispatchers.IO).launch {
-            lightRepository.searchLight()
+        viewModelScope.launch {
+            lights.collect { lights ->
+                val data = lights.associate { light ->
+                    light.ip to lightRepository.getLightData(light.ip)!!
+                }
+                _lightData.value = data
+            }
         }
     }
 
-    private fun refreshLights() {
-        _lights.value = lightRepository.getSavedLights()
-
+    fun searchLight() {
         viewModelScope.launch {
-            val dataMap = mutableMapOf<String, LightData>()
+            _isSearching.value = true
 
-            for (light in _lights.value) {
-                lightRepository.getLightData(light.ip)?.let { data ->
-                    dataMap[light.ip] = data
-                }
-            }
+            lightRepository.searchLight()
 
-            _lightData.value = dataMap
+            _isSearching.value = false
         }
     }
 
@@ -114,7 +111,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         )
         lightRepository.saveLight(light)
 
-        refreshLights()
+        lightRepository.refreshLights()
     }
 
     fun removeLight(ip: String) {
@@ -124,7 +121,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         )
         lightRepository.removeLight(light)
 
-        refreshLights()
+        lightRepository.refreshLights()
     }
 
     fun getSavedLights(): List<LightObject> {
