@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity()
 
         val sharedPref = getPreferences(MODE_PRIVATE) ?: return
 
-        val wifi = getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifi = getSystemService(WIFI_SERVICE) as WifiManager
 
         val lightRepository = LightRepository(sharedPref, wifi)
         val lightItemViewModel = LightItemViewModel(lightRepository)

@@ -169,7 +169,7 @@ class LightRepository(private val sharedPreferences: SharedPreferences, private 
     fun getSavedLights(): List<LightObject> {
         val allSavedLights = mutableListOf<LightObject>()
 
-        for ((key, value) in sharedPreferences.all)
+        for ((_, value) in sharedPreferences.all)
         {
             //Only accept saved app if package name is string
             if (value is String)
