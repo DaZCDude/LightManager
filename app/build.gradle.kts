@@ -52,6 +52,10 @@ android {
 
 dependencies {
     implementation(libs.androidx.compose.material.icons.core)
+    // For AppWidgets support
+    implementation(libs.androidx.glance.appwidget)
+    // For interop APIs with Material 3
+    implementation(libs.androidx.glance.material3)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
