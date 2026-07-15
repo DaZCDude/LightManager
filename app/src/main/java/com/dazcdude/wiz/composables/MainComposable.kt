@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dazcdude.wiz.viewmodels.LightItemViewModel
 
@@ -50,10 +51,6 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
     val lights by lightItemViewModel.lights.collectAsState()
 
     var showSaveDialog by remember { mutableStateOf(false) }
-    var saveIP by remember { mutableStateOf("") }
-    var saveDisplayName by remember { mutableStateOf("") }
-
-    val ipValid = saveIP.isBlank() || lightItemViewModel.isValidIp(saveIP)
 
     val wifiEnabled = rememberWifiEnabled()
 
@@ -109,78 +106,41 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
             }
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-                .padding(16.dp)
-                .clip(
-                    RoundedCornerShape(
-                        16.dp,
+        if (lights.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Press the search or plus button to\nstart adding lights",
+                    textAlign = TextAlign.Center)
+            }
+        }
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding)
+                    .padding(16.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            16.dp,
+                        )
+                    ),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(lights) { light ->
+                    LightItem(
+                        lightItemViewModel = lightItemViewModel,
+                        lightObject = light
                     )
-                ),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            items(lights) { light ->
-                LightItem(
-                    lightItemViewModel = lightItemViewModel,
-                    lightObject = light
-                )
+                }
             }
         }
 
         if (showSaveDialog) {
-            AlertDialog(
-                onDismissRequest = { showSaveDialog = false },
-                title = { Text("Add Light") },
-                text = {
-                    Column {
-                        Text("IP Address")
-
-                        TextField(
-                            value = saveIP,
-                            onValueChange = {saveIP = it},
-                            singleLine = true,
-                            isError = !ipValid,
-                            supportingText = {
-                                if (!ipValid) {
-                                    Text("Invalid IP Address!")
-                                }
-                            })
-
-                        Text("Display Name")
-
-                        TextField(
-                            value = saveDisplayName,
-                            onValueChange = {saveDisplayName = it},
-                            singleLine = true)
-                    }
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            lightItemViewModel.saveLight(saveIP, saveDisplayName)
-
-                            saveIP = ""
-                            saveDisplayName = ""
-
-                            showSaveDialog = false
-                        },
-                        enabled = lightItemViewModel.isValidIp(saveIP) && saveDisplayName.isNotBlank()
-                    ) {
-                        Text("Save")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            showSaveDialog = false
-                        }
-                    ) {
-                        Text("Cancel")
-                    }
-                }
-            )
+            SaveLightDialog(lightItemViewModel, {showSaveDialog = false})
         }
     }
 }
