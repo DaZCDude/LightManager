@@ -1,4 +1,4 @@
-# Light Bulb Manager
+# Light Manager
 
 
 > [!IMPORTANT]
@@ -11,7 +11,7 @@
 ---
 
 ## About
-An open-source, WiZ-compatible light bulb manager for Android.
+An open-source, WiZ-compatible light manager for Android.
 
 The app communicates directly with WiZ lights over UDP, so Home Assistant is not required.
 
