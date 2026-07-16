@@ -18,7 +18,7 @@ The app communicates directly with WiZ lights over UDP, so Home Assistant is not
 This does NOT support managing WiZ lights over the internet. Its supports LAN only.<br>
 The app however still needs the network-permission to work.
 
-| Feature                   |  Available |
+| Features                   |  Available |
 | -------------             | ------------- |
 | Search for lights         | ✅        |
 | Manually add light by IP  | ✅        |
@@ -26,6 +26,8 @@ The app however still needs the network-permission to work.
 | Control brightness        | ✅        |
 | Control scene             | ❌        |
 | Setup new light           | ❌        |
+| Rooms                     | ❌        |
+| Automation                | ❌        |
 
 ## Installation
 <a href="https://intradeus.github.io/http-protocol-redirector?r=obtainium://add/github.com/DaZCDude/LBManager"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/b1c8ac6f2ab08497189721a788a5763e28ff64cd/assets/graphics/badge_obtainium.png" alt="Obtainium" width="30%"></a>
