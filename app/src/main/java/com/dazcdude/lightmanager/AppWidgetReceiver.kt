@@ -1,4 +1,4 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver

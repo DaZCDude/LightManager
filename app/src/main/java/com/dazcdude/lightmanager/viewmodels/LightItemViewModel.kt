@@ -1,11 +1,10 @@
-package com.dazcdude.wiz.viewmodels
+package com.dazcdude.lightmanager.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dazcdude.wiz.LightData
-import com.dazcdude.wiz.LightObject
-import com.dazcdude.wiz.repositories.LightRepository
-import kotlinx.coroutines.CoroutineScope
+import com.dazcdude.lightmanager.LightData
+import com.dazcdude.lightmanager.LightObject
+import com.dazcdude.lightmanager.repositories.LightRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

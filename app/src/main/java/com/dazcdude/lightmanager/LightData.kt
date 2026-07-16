@@ -1,4 +1,4 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
 data class LightData(
     val state: Boolean,

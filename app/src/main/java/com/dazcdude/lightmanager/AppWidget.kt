@@ -1,4 +1,4 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
 import android.content.Context
 import androidx.compose.runtime.Composable

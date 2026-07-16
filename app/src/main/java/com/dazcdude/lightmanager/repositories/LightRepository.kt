@@ -1,11 +1,11 @@
-package com.dazcdude.wiz.repositories
+package com.dazcdude.lightmanager.repositories
 
 import android.content.SharedPreferences
 import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.core.content.edit
-import com.dazcdude.wiz.LightData
-import com.dazcdude.wiz.LightObject
+import com.dazcdude.lightmanager.LightData
+import com.dazcdude.lightmanager.LightObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,6 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.MulticastSocket
-import java.net.NetworkInterface
 import java.net.SocketTimeoutException
 
 class LightRepository(private val sharedPreferences: SharedPreferences, private val wifi: WifiManager) {

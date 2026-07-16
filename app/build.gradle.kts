@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dazcdude.wiz"
+    namespace = "com.dazcdude.lightmanager"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.dazcdude.wiz"
+        applicationId = "com.dazcdude.lightmanager"
         minSdk = 36
         targetSdk = 36
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -21,6 +21,6 @@ class ExampleInstrumentedTest
     {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.dazcdude.wiz", appContext.packageName)
+        assertEquals("com.dazcdude.lightmanager", appContext.packageName)
     }
 }

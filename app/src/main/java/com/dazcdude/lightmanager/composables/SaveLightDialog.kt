@@ -1,4 +1,4 @@
-package com.dazcdude.wiz.composables
+package com.dazcdude.lightmanager.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.dazcdude.wiz.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
 
 @Composable
 fun SaveLightDialog(lightItemViewModel: LightItemViewModel, onDismissRequest: () -> Unit) {

@@ -1,6 +1,5 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
-import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -8,10 +7,10 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.dazcdude.wiz.ui.theme.WiZManagerTheme
-import com.dazcdude.wiz.composables.MainComposable
-import com.dazcdude.wiz.repositories.LightRepository
-import com.dazcdude.wiz.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.ui.theme.LightManagerTheme
+import com.dazcdude.lightmanager.composables.MainComposable
+import com.dazcdude.lightmanager.repositories.LightRepository
+import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
 
 class MainActivity : ComponentActivity()
 {
@@ -28,7 +27,7 @@ class MainActivity : ComponentActivity()
         val lightItemViewModel = LightItemViewModel(lightRepository)
 
         setContent {
-            WiZManagerTheme {
+            LightManagerTheme {
                 MainComposable(lightItemViewModel, ::openWifiSettings)
             }
         }

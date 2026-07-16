@@ -1,4 +1,4 @@
-package com.dazcdude.wiz
+package com.dazcdude.lightmanager
 
 import org.junit.Test
 

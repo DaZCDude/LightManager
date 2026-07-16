@@ -1,4 +1,4 @@
-package com.dazcdude.wiz.ui.theme
+package com.dazcdude.lightmanager.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
