@@ -17,7 +17,7 @@ import java.net.InetAddress
 import java.net.MulticastSocket
 import java.net.SocketTimeoutException
 
-class LightRepository(private val sharedPreferences: SharedPreferences, private val wifi: WifiManager) {
+class LightItemRepository(private val sharedPreferences: SharedPreferences, private val wifi: WifiManager) {
     private val port: Int = 38899
 
     private val _lights = MutableStateFlow<List<LightObject>>(emptyList())

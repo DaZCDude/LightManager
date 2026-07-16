@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dazcdude.lightmanager.LightData
 import com.dazcdude.lightmanager.LightObject
-import com.dazcdude.lightmanager.repositories.LightRepository
+import com.dazcdude.lightmanager.repositories.LightItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.InetAddress
 
-class LightItemViewModel(private val lightRepository: LightRepository) : ViewModel()
+class LightItemViewModel(private val lightItemRepository: LightItemRepository) : ViewModel()
 {
-    val lights = lightRepository.lights
+    val lights = lightItemRepository.lights
 
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
@@ -26,7 +26,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         viewModelScope.launch {
             lights.collect { lights ->
                 val data = lights.associate { light ->
-                    light.ip to lightRepository.getLightData(light.ip)!!
+                    light.ip to lightItemRepository.getLightData(light.ip)!!
                 }
                 _lightData.value = data
             }
@@ -37,7 +37,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         viewModelScope.launch {
             _isSearching.value = true
 
-            lightRepository.searchLight()
+            lightItemRepository.searchLight()
 
             _isSearching.value = false
         }
@@ -64,7 +64,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         }
         """.trimIndent()
 
-            lightRepository.sendUdp(json, bulbIp)
+            lightItemRepository.sendUdp(json, bulbIp)
         }
     }
 
@@ -80,7 +80,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         }
         """.trimIndent()
 
-            lightRepository.sendUdp(json, bulbIp)
+            lightItemRepository.sendUdp(json, bulbIp)
         }
     }
 
@@ -99,7 +99,7 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
         }
         """.trimIndent()
 
-            lightRepository.sendUdp(json, bulbIp)
+            lightItemRepository.sendUdp(json, bulbIp)
         }
     }
 
@@ -108,9 +108,9 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
             ip = ip,
             displayName = displayName
         )
-        lightRepository.saveLight(light)
+        lightItemRepository.saveLight(light)
 
-        lightRepository.refreshLights()
+        lightItemRepository.refreshLights()
     }
 
     fun removeLight(ip: String) {
@@ -118,12 +118,12 @@ class LightItemViewModel(private val lightRepository: LightRepository) : ViewMod
             ip = ip,
             displayName = ""
         )
-        lightRepository.removeLight(light)
+        lightItemRepository.removeLight(light)
 
-        lightRepository.refreshLights()
+        lightItemRepository.refreshLights()
     }
 
     fun getSavedLights(): List<LightObject> {
-        return lightRepository.getSavedLights()
+        return lightItemRepository.getSavedLights()
     }
 }

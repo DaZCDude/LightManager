@@ -9,7 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.dazcdude.lightmanager.ui.theme.LightManagerTheme
 import com.dazcdude.lightmanager.composables.MainComposable
-import com.dazcdude.lightmanager.repositories.LightRepository
+import com.dazcdude.lightmanager.repositories.LightItemRepository
 import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
 
 class MainActivity : ComponentActivity()
@@ -23,8 +23,8 @@ class MainActivity : ComponentActivity()
 
         val wifi = getSystemService(WIFI_SERVICE) as WifiManager
 
-        val lightRepository = LightRepository(sharedPref, wifi)
-        val lightItemViewModel = LightItemViewModel(lightRepository)
+        val lightItemRepository = LightItemRepository(sharedPref, wifi)
+        val lightItemViewModel = LightItemViewModel(lightItemRepository)
 
         setContent {
             LightManagerTheme {
