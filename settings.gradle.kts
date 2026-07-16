@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "WiZ Manager"
+rootProject.name = "Light Manager"
 include(":app")
  
