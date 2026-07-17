@@ -10,12 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 @Composable
-fun SaveLightDialog(lightItemViewModel: LightItemViewModel, onDismissRequest: () -> Unit) {
+fun SaveLightDialog(mainViewModel: MainViewModel, onDismissRequest: () -> Unit) {
     var saveIP by remember { mutableStateOf("") }
-    val ipValid = saveIP.isBlank() || lightItemViewModel.isValidIp(saveIP)
+    val ipValid = saveIP.isBlank() || mainViewModel.isValidIp(saveIP)
     var saveDisplayName by remember { mutableStateOf("") }
 
     AlertDialog(
@@ -47,14 +47,14 @@ fun SaveLightDialog(lightItemViewModel: LightItemViewModel, onDismissRequest: ()
         confirmButton = {
             TextButton(
                 onClick = {
-                    lightItemViewModel.saveLight(saveIP, saveDisplayName)
+                    mainViewModel.saveLight(saveIP, saveDisplayName)
 
                     saveIP = ""
                     saveDisplayName = ""
 
                     onDismissRequest()
                 },
-                enabled = lightItemViewModel.isValidIp(saveIP) && saveDisplayName.isNotBlank()
+                enabled = mainViewModel.isValidIp(saveIP) && saveDisplayName.isNotBlank()
             ) {
                 Text("Save")
             }

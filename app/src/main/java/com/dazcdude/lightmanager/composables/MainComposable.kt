@@ -37,11 +37,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 @Composable
-fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -> Unit) {
-    val lights by lightItemViewModel.lights.collectAsState()
+fun MainComposable(mainViewModel: MainViewModel, openWifiSettings:() -> Unit) {
+    val lights by mainViewModel.lights.collectAsState()
 
     var showSaveDialog by remember { mutableStateOf(false) }
 
@@ -64,7 +64,7 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
         )
     }
 
-    if (lightItemViewModel.isSearching.collectAsState().value) {
+    if (mainViewModel.isSearching.collectAsState().value) {
         AlertDialog(
             onDismissRequest = {},
             confirmButton = {},
@@ -90,7 +90,7 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
     Scaffold(
         floatingActionButton = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                FloatingActionButton(onClick = { lightItemViewModel.searchLight() }) {
+                FloatingActionButton(onClick = { mainViewModel.searchLight() }) {
                     Icon(Icons.Default.Refresh, contentDescription = "Refresh")
                 }
                 FloatingActionButton(onClick = { showSaveDialog = true }) {
@@ -125,7 +125,7 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
             ) {
                 items(lights) { light ->
                     LightItem(
-                        lightItemViewModel = lightItemViewModel,
+                        mainViewModel = mainViewModel,
                         lightObject = light
                     )
                 }
@@ -133,7 +133,7 @@ fun MainComposable(lightItemViewModel: LightItemViewModel, openWifiSettings:() -
         }
 
         if (showSaveDialog) {
-            SaveLightDialog(lightItemViewModel, {showSaveDialog = false})
+            SaveLightDialog(mainViewModel, {showSaveDialog = false})
         }
     }
 }

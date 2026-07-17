@@ -14,6 +14,9 @@ import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
 
 class AppWidget: GlanceAppWidget() {
 
@@ -30,19 +33,46 @@ class AppWidget: GlanceAppWidget() {
 
     @Composable
     private fun MyContent() {
+        fun sendUdp(message: String, bulbIp: String) {
+            DatagramSocket().use { socket ->
+                val address = InetAddress.getByName(bulbIp)
+
+                val packet = DatagramPacket(
+                    message.toByteArray(),
+                    message.length,
+                    address,
+                    SettingsSingleton.PORT
+                )
+
+                socket.send(packet)
+            }
+        }
+        fun turnLightOn(lightIp: String) {
+            val json = """
+        {
+            "method":"setState",
+            "params":{
+                "state":true
+            }
+        }
+        """.trimIndent()
+
+            sendUdp(json, lightIp)
+        }
+
         Column(
             modifier = GlanceModifier.fillMaxSize(),
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Where to?", modifier = GlanceModifier.padding(12.dp))
+            Text(text = "192.168.1.10", modifier = GlanceModifier.padding(12.dp))
             Row(horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(
-                    text = "Home",
-                    onClick = {}
+                    text = "On",
+                    onClick = {turnLightOn("192.168.1.10")}
                 )
                 Button(
-                    text = "Work",
+                    text = "Off",
                     onClick = {}
                 )
             }

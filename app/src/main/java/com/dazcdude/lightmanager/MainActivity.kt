@@ -1,7 +1,6 @@
 package com.dazcdude.lightmanager
 
 import android.content.Intent
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -10,7 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import com.dazcdude.lightmanager.ui.theme.LightManagerTheme
 import com.dazcdude.lightmanager.composables.MainComposable
 import com.dazcdude.lightmanager.repositories.LightItemRepository
-import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.repositories.MainRepository
+import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 class MainActivity : ComponentActivity()
 {
@@ -21,14 +21,14 @@ class MainActivity : ComponentActivity()
 
         val sharedPref = getPreferences(MODE_PRIVATE) ?: return
 
-        val wifi = getSystemService(WIFI_SERVICE) as WifiManager
+        val lightItemRepository = LightItemRepository()
+        val mainRepository = MainRepository(sharedPref)
 
-        val lightItemRepository = LightItemRepository(sharedPref, wifi)
-        val lightItemViewModel = LightItemViewModel(lightItemRepository)
+        val mainViewModel = MainViewModel(mainRepository, lightItemRepository)
 
         setContent {
             LightManagerTheme {
-                MainComposable(lightItemViewModel, ::openWifiSettings)
+                MainComposable(mainViewModel, ::openWifiSettings)
             }
         }
     }

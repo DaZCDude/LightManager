@@ -36,15 +36,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.dazcdude.lightmanager.LightObject
 import com.dazcdude.lightmanager.R
-import com.dazcdude.lightmanager.viewmodels.LightItemViewModel
+import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) {
+fun LightItem(mainViewModel: MainViewModel, lightObject: LightObject) {
     var showSheet by remember { mutableStateOf(false) }
     var brightnessSliderPosition by remember { mutableFloatStateOf(0f) }
 
-    val lightData by lightItemViewModel.lightData.collectAsState()
+    val lightData by mainViewModel.lightData.collectAsState()
     var lightOn = lightData[lightObject.ip]?.state ?: false
 
     val sheetState = rememberModalBottomSheetState(
@@ -85,15 +85,15 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    LightOnButton { lightItemViewModel.turnBulbOn(lightObject.ip) }
+                    LightOnButton { mainViewModel.turnLightOn(lightObject.ip) }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    LightOffButton { lightItemViewModel.turnBulbOff(lightObject.ip) }
+                    LightOffButton { mainViewModel.turnLightOff(lightObject.ip) }
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    DeleteButton { lightItemViewModel.removeLight(lightObject.ip) }
+                    DeleteButton { mainViewModel.removeLight(lightObject.ip) }
                 }
             }
 
@@ -115,7 +115,7 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
                     steps = 9,
                     valueRange = 10f..100f,
                     onValueChangeFinished = {
-                        lightItemViewModel.setBrightness(lightObject.ip, brightnessSliderPosition.toInt())
+                        mainViewModel.setLightBrightness(lightObject.ip, brightnessSliderPosition.toInt())
                         lightOn = true
                     }
                 )
@@ -145,11 +145,11 @@ fun LightItem(lightItemViewModel: LightItemViewModel, lightObject: LightObject) 
 
         Spacer(modifier = Modifier.weight(1f))
 
-        LightOffButton { lightItemViewModel.turnBulbOff(lightObject.ip) }
+        LightOffButton { mainViewModel.turnLightOff(lightObject.ip) }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        LightOnButton { lightItemViewModel.turnBulbOn(lightObject.ip) }
+        LightOnButton { mainViewModel.turnLightOn(lightObject.ip) }
     }
 }
 
