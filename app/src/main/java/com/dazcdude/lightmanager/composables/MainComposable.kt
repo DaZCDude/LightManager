@@ -124,7 +124,7 @@ fun MainComposable(mainViewModel: MainViewModel, openWifiSettings:() -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(lights) { light ->
-                    LightItem(
+                    LightItemComposable(
                         mainViewModel = mainViewModel,
                         lightObject = light
                     )

@@ -1,6 +1,7 @@
 package com.dazcdude.lightmanager.repositories
 
 import android.util.Log
+import com.dazcdude.lightmanager.LightController
 import com.dazcdude.lightmanager.LightData
 import com.dazcdude.lightmanager.SettingsSingleton
 import kotlinx.coroutines.Dispatchers
@@ -65,61 +66,4 @@ class LightItemRepository {
                 return@withContext null
             }
         }
-
-    fun sendUdp(message: String, bulbIp: String) {
-        DatagramSocket().use { socket ->
-            val address = InetAddress.getByName(bulbIp)
-
-            val packet = DatagramPacket(
-                message.toByteArray(),
-                message.length,
-                address,
-                SettingsSingleton.PORT
-            )
-
-            socket.send(packet)
-        }
-    }
-
-    fun turnLightOn(lightIp: String) {
-        val json = """
-        {
-            "method":"setState",
-            "params":{
-                "state":true
-            }
-        }
-        """.trimIndent()
-
-        sendUdp(json, lightIp)
-    }
-
-    fun turnLightOff(lightIp: String) {
-        val json = """
-        {
-            "method":"setState",
-            "params":{
-                "state":false
-            }
-        }
-        """.trimIndent()
-
-        sendUdp(json, lightIp)
-    }
-
-    fun setBrightness(lightIp: String, brightness: Int) {
-        val safeBrightness = brightness.coerceIn(10, 100)
-
-        val json = """
-        {
-            "method": "setPilot",
-            "params": {
-                "state": true,
-                "dimming": $safeBrightness
-            }
-        }
-        """.trimIndent()
-
-        sendUdp(json, lightIp)
-    }
 }

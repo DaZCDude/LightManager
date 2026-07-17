@@ -2,6 +2,7 @@ package com.dazcdude.lightmanager.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dazcdude.lightmanager.LightController
 import com.dazcdude.lightmanager.LightData
 import com.dazcdude.lightmanager.LightObject
 import com.dazcdude.lightmanager.repositories.LightItemRepository
@@ -70,19 +71,19 @@ class MainViewModel(private val mainRepository: MainRepository, private val ligh
 
     fun turnLightOn(lightIp: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            lightItemRepository.turnLightOn(lightIp)
+            LightController.turnLightOn(lightIp)
         }
     }
 
     fun turnLightOff(lightIp: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            lightItemRepository.turnLightOff(lightIp)
+            LightController.turnLightOff(lightIp)
         }
     }
 
     fun setLightBrightness(lightIp: String, brightness: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            lightItemRepository.setBrightness(lightIp, brightness)
+            LightController.setBrightness(lightIp, brightness)
         }
     }
 }

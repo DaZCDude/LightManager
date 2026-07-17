@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+        val sharedPref = getSharedPreferences(SettingsSingleton.SHARED_PREFERENCES_NAME, MODE_PRIVATE) ?: return
 
         val lightItemRepository = LightItemRepository()
         val mainRepository = MainRepository(sharedPref)

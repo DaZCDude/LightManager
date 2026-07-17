@@ -1,22 +1,34 @@
 package com.dazcdude.lightmanager
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.glance.Button
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
+import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
+import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
+import org.json.JSONObject
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+
+val LightIpKey = ActionParameters.Key<String>("light_ip")
 
 class AppWidget: GlanceAppWidget() {
 
@@ -25,57 +37,83 @@ class AppWidget: GlanceAppWidget() {
         // Use `withContext` to switch to another thread for long-running
         // operations.
 
+        val widgetSharedPref = context.getSharedPreferences("widget_light_saved", MODE_PRIVATE) ?: return
+
+        val savedLight = widgetSharedPref.getString("selected_light", null)
+
+        var light = LightObject("", "")
+
+        if (savedLight != null) {
+            val json = JSONObject(savedLight)
+
+            light = LightObject(
+                ip = json.getString("ip"),
+                displayName = json.getString("display_name")
+            )
+        }
+
         provideContent {
             // create your AppWidget here
-            MyContent()
+            MyContent(light)
         }
     }
 
     @Composable
-    private fun MyContent() {
-        fun sendUdp(message: String, bulbIp: String) {
-            DatagramSocket().use { socket ->
-                val address = InetAddress.getByName(bulbIp)
-
-                val packet = DatagramPacket(
-                    message.toByteArray(),
-                    message.length,
-                    address,
-                    SettingsSingleton.PORT
-                )
-
-                socket.send(packet)
-            }
-        }
-        fun turnLightOn(lightIp: String) {
-            val json = """
-        {
-            "method":"setState",
-            "params":{
-                "state":true
-            }
-        }
-        """.trimIndent()
-
-            sendUdp(json, lightIp)
-        }
-
+    private fun MyContent(lightObject: LightObject) {
         Column(
-            modifier = GlanceModifier.fillMaxSize(),
+            modifier = GlanceModifier.fillMaxSize().background(Color.White),
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "192.168.1.10", modifier = GlanceModifier.padding(12.dp))
-            Row(horizontalAlignment = Alignment.CenterHorizontally) {
-                Button(
-                    text = "On",
-                    onClick = {turnLightOn("192.168.1.10")}
-                )
-                Button(
-                    text = "Off",
-                    onClick = {}
-                )
+            if (lightObject.ip.isEmpty()) {
+
+            }
+            else {
+                Text(text = lightObject.ip, modifier = GlanceModifier.padding(12.dp))
+                Row(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        text = "On",
+                        onClick = actionRunCallback<TurnLightOnAction>(
+                            actionParametersOf(
+                                LightIpKey to lightObject.ip
+                            )
+                        )
+                    )
+
+                    Button(
+                        text = "Off",
+                        onClick = actionRunCallback<TurnLightOffAction>(
+                            actionParametersOf(
+                                LightIpKey to lightObject.ip
+                            )
+                        )
+                    )
+                }
             }
         }
+    }
+}
+class TurnLightOnAction : ActionCallback
+{
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
+        val ip = parameters[LightIpKey] ?: return
+
+        LightController.turnLightOn(ip)
+    }
+}
+class TurnLightOffAction : ActionCallback
+{
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
+        val ip = parameters[LightIpKey] ?: return
+
+        LightController.turnLightOff(ip)
     }
 }

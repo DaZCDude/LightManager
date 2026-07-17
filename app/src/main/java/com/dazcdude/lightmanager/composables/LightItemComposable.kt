@@ -41,7 +41,7 @@ import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LightItem(mainViewModel: MainViewModel, lightObject: LightObject) {
+fun LightItemComposable(mainViewModel: MainViewModel, lightObject: LightObject) {
     var showSheet by remember { mutableStateOf(false) }
     var brightnessSliderPosition by remember { mutableFloatStateOf(0f) }
 
