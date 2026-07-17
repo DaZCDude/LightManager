@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -44,12 +45,15 @@ fun LightItem(mainViewModel: MainViewModel, lightObject: LightObject) {
     var showSheet by remember { mutableStateOf(false) }
     var brightnessSliderPosition by remember { mutableFloatStateOf(0f) }
 
-    val lightData by mainViewModel.lightData.collectAsState()
-    var lightOn = lightData[lightObject.ip]?.state ?: false
-
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+
+    val lightData by mainViewModel.lightItemData.collectAsState()
+
+    LaunchedEffect(lightObject.ip) {
+        mainViewModel.loadLightItemData(lightObject.ip)
+    }
 
     // Bottom sheet UI
     if (showSheet) {
@@ -116,7 +120,6 @@ fun LightItem(mainViewModel: MainViewModel, lightObject: LightObject) {
                     valueRange = 10f..100f,
                     onValueChangeFinished = {
                         mainViewModel.setLightBrightness(lightObject.ip, brightnessSliderPosition.toInt())
-                        lightOn = true
                     }
                 )
             }

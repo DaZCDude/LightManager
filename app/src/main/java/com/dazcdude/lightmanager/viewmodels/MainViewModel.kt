@@ -20,17 +20,12 @@ class MainViewModel(private val mainRepository: MainRepository, private val ligh
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private val _lightData = MutableStateFlow<Map<String, LightData>>(emptyMap())
-    val lightData: StateFlow<Map<String, LightData>> = _lightData
+    private val _lightItemData = MutableStateFlow<LightData?>(null)
+    val lightItemData: StateFlow<LightData?> = _lightItemData
 
-    init {
+    fun loadLightItemData(lightIp: String) {
         viewModelScope.launch {
-            lights.collect { lights ->
-                val data = lights.associate { light ->
-                    light.ip to mainRepository.getLightData(light.ip)!!
-                }
-                _lightData.value = data
-            }
+            _lightItemData.value = lightItemRepository.getLightData(lightIp)
         }
     }
 
