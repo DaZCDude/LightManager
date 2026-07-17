@@ -24,6 +24,7 @@ The app however still needs the network-permission to work.
 | Manually add light by IP  | ✅        |
 | Control on and off state  | ✅        |
 | Control brightness        | ✅        |
+| Widget                    | ✅        |
 | Control scene             | ❌        |
 | Setup new light           | ❌        |
 | Rooms                     | ❌        |
