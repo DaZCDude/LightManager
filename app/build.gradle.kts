@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     // For interop APIs with Material 3
     implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.work.runtime)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

@@ -12,12 +12,15 @@ kotlin = "2.2.10"
 composeBom = "2026.02.01"
 roomKtx = "2.6.1"
 roomRuntime = "2.8.4"
+workManager = "2.10.1"
+
 
 [libraries]
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceAppwidget" }
 androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glanceMaterial3" }
+androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-ktx-v261 = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
