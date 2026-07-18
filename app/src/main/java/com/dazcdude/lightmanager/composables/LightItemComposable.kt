@@ -49,8 +49,6 @@ fun LightItemComposable(mainViewModel: MainViewModel, lightObject: LightObject) 
         skipPartiallyExpanded = true
     )
 
-    val lightData by mainViewModel.lightItemData.collectAsState()
-
     LaunchedEffect(lightObject.ip) {
         mainViewModel.loadLightItemData(lightObject.ip)
     }

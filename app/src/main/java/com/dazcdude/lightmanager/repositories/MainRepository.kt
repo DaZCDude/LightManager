@@ -3,7 +3,6 @@ package com.dazcdude.lightmanager.repositories
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.content.edit
-import com.dazcdude.lightmanager.LightData
 import com.dazcdude.lightmanager.LightObject
 import com.dazcdude.lightmanager.SettingsSingleton
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.DatagramPacket
-import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.MulticastSocket
 import java.net.SocketTimeoutException

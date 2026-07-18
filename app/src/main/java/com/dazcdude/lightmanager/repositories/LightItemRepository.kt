@@ -1,7 +1,6 @@
 package com.dazcdude.lightmanager.repositories
 
 import android.util.Log
-import com.dazcdude.lightmanager.LightController
 import com.dazcdude.lightmanager.LightData
 import com.dazcdude.lightmanager.SettingsSingleton
 import kotlinx.coroutines.Dispatchers

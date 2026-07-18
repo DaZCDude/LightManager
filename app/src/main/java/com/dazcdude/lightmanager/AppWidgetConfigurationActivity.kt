@@ -1,6 +1,5 @@
 package com.dazcdude.lightmanager
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,13 +14,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
 import com.dazcdude.lightmanager.composables.WidgetLightItemComposable
@@ -131,7 +128,7 @@ class AppWidgetConfigurationActivity : ComponentActivity()
         }
 
         setResult(
-            Activity.RESULT_OK,
+            RESULT_OK,
             Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         )
         finish()
