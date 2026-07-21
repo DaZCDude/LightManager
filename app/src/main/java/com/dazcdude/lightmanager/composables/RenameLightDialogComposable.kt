@@ -13,29 +13,14 @@ import androidx.compose.runtime.setValue
 import com.dazcdude.lightmanager.viewmodels.MainViewModel
 
 @Composable
-fun SaveLightDialogComposable(mainViewModel: MainViewModel, onDismissRequest: () -> Unit) {
-    var saveIP by remember { mutableStateOf("") }
-    val ipValid = saveIP.isBlank() || mainViewModel.isValidIp(saveIP)
+fun RenameLightDialogComposable(mainViewModel: MainViewModel, onDismissRequest: () -> Unit, lightIp: String) {
     var saveDisplayName by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Add Light") },
+        title = { Text("Rename Light") },
         text = {
             Column {
-                Text("IP Address")
-
-                TextField(
-                    value = saveIP,
-                    onValueChange = {saveIP = it},
-                    singleLine = true,
-                    isError = !ipValid,
-                    supportingText = {
-                        if (!ipValid) {
-                            Text("Invalid IP Address!")
-                        }
-                    })
-
                 Text("Display Name")
 
                 TextField(
@@ -47,14 +32,12 @@ fun SaveLightDialogComposable(mainViewModel: MainViewModel, onDismissRequest: ()
         confirmButton = {
             TextButton(
                 onClick = {
-                    mainViewModel.saveLight(saveIP, saveDisplayName)
+                    mainViewModel.saveLight(lightIp, saveDisplayName)
 
-                    saveIP = ""
                     saveDisplayName = ""
 
                     onDismissRequest()
-                },
-                enabled = mainViewModel.isValidIp(saveIP) && saveDisplayName.isNotBlank()
+                }
             ) {
                 Text("Save")
             }

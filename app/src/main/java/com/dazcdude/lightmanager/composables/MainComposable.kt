@@ -133,7 +133,7 @@ fun MainComposable(mainViewModel: MainViewModel, openWifiSettings:() -> Unit) {
         }
 
         if (showSaveDialog) {
-            SaveLightDialog(mainViewModel, {showSaveDialog = false})
+            SaveLightDialogComposable(mainViewModel, {showSaveDialog = false})
         }
     }
 }

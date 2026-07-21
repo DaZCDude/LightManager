@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
@@ -22,6 +23,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +45,7 @@ import com.dazcdude.lightmanager.viewmodels.MainViewModel
 @Composable
 fun LightItemComposable(mainViewModel: MainViewModel, lightObject: LightObject) {
     var showSheet by remember { mutableStateOf(false) }
+    var isEditingDisplayName by remember { mutableStateOf(false) }
     var brightnessSliderPosition by remember { mutableFloatStateOf(0f) }
 
     val sheetState = rememberModalBottomSheetState(
@@ -52,6 +55,8 @@ fun LightItemComposable(mainViewModel: MainViewModel, lightObject: LightObject) 
     LaunchedEffect(lightObject.ip) {
         mainViewModel.loadLightItemData(lightObject.ip)
     }
+
+    if (isEditingDisplayName) { RenameLightDialogComposable(mainViewModel, {isEditingDisplayName = false}, lightObject.ip) }
 
     // Bottom sheet UI
     if (showSheet) {
@@ -94,6 +99,23 @@ fun LightItemComposable(mainViewModel: MainViewModel, lightObject: LightObject) 
                     LightOffButton { mainViewModel.turnLightOff(lightObject.ip) }
 
                     Spacer(modifier = Modifier.weight(1f))
+
+                    FilledIconButton(
+                        onClick = {isEditingDisplayName = true},
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
+                        ),
+                        modifier = Modifier.size(54.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit Name",
+                            modifier = Modifier.fillMaxSize().padding(10.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
 
                     DeleteButton { mainViewModel.removeLight(lightObject.ip) }
                 }
