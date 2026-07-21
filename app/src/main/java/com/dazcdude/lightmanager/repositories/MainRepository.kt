@@ -92,8 +92,12 @@ class MainRepository(private val sharedPreferences: SharedPreferences)
                         ip = response.address.hostAddress,
                         displayName = response.address.hostName
                     )
-                    saveLight(light)
-                    refreshLights()
+
+                    //Checks if any saved light object already has the same ip
+                    if (_lights.value.none { it.ip == light.ip }) {
+                        saveLight(light)
+                        refreshLights()
+                    }
                 }
 
                 results.add(
