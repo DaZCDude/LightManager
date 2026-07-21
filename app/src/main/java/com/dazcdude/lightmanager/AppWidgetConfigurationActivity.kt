@@ -25,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.lifecycle.lifecycleScope
 import com.dazcdude.lightmanager.composables.WidgetLightItemComposable
 import com.dazcdude.lightmanager.ui.theme.LightManagerTheme
@@ -127,20 +129,23 @@ class AppWidgetConfigurationActivity : ComponentActivity()
         val glanceId = GlanceAppWidgetManager(this)
             .getGlanceIdBy(appWidgetId)
 
-        val widgetSharedPref = getSharedPreferences("widget_light_saved", MODE_PRIVATE) ?: return
-
         val json = JSONObject().apply {
             put("ip", lightObject.ip)
             put("display_name", lightObject.displayName)
         }
 
-        widgetSharedPref.edit()
-        {
-            putString("selected_light", json.toString())
-        }
-
         lifecycleScope.launch {
-            AppWidget().update(this@AppWidgetConfigurationActivity, glanceId)
+            updateAppWidgetState(
+                context = this@AppWidgetConfigurationActivity,
+                glanceId = glanceId
+            ) { prefs ->
+                prefs[stringPreferencesKey("selected_light")] = json.toString()
+            }
+
+            AppWidget().update(
+                this@AppWidgetConfigurationActivity,
+                glanceId
+            )
         }
 
         setResult(
