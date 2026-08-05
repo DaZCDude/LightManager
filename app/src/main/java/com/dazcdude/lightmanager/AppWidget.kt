@@ -34,6 +34,7 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
+import com.dazcdude.lightmanager.composables.WidgetComposable
 import org.json.JSONObject
 
 val LightIpKey = ActionParameters.Key<String>("light_ip")
@@ -63,71 +64,7 @@ class AppWidget: GlanceAppWidget() {
                 LightObject("", "")
             }
 
-            MyContent(light)
-        }
-    }
-
-    @Composable
-    private fun MyContent(lightObject: LightObject) {
-        Column(
-            modifier = GlanceModifier
-                .padding(4.dp)
-                .fillMaxSize()
-                .background(GlanceTheme.colors.surface),
-            verticalAlignment = Alignment.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (lightObject.ip.isEmpty()) {
-                Box(modifier = GlanceModifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center) {
-                    Text(
-                        text = "Configure widget to use",
-                        style = TextStyle(
-                            color = ColorProvider(Color.Black, Color.White),
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                }
-            }
-            else {
-                Column(
-                    modifier = GlanceModifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = lightObject.displayName,
-                        style = TextStyle(
-                            color = ColorProvider(Color.Black, Color.White)
-                        )
-                    )
-
-                    Spacer(modifier = GlanceModifier.height(8.dp))
-
-                    Row(horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = GlanceModifier.padding(8.dp)) {
-                        Button(
-                            text = "On",
-                            onClick = actionRunCallback<TurnLightOnAction>(
-                                actionParametersOf(
-                                    LightIpKey to lightObject.ip
-                                )
-                            )
-                        )
-
-                        Spacer(modifier = GlanceModifier.padding(4.dp))
-
-                        Button(
-                            text = "Off",
-                            onClick = actionRunCallback<TurnLightOffAction>(
-                                actionParametersOf(
-                                    LightIpKey to lightObject.ip
-                                )
-                            )
-                        )
-                    }
-                }
-            }
+            WidgetComposable(light)
         }
     }
 }
