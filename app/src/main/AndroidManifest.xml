@@ -16,7 +16,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.LightManager">
+            android:theme="@style/Theme.LightManager.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -26,7 +26,7 @@
         <activity
             android:name=".AppWidgetConfigurationActivity"
             android:exported="true"
-            android:theme="@style/Theme.LightManager">
+            android:theme="@style/Theme.LightManager.Splash">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
