@@ -21,6 +21,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.width
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
@@ -68,10 +69,18 @@ fun WidgetComposable(lightObject: LightObject) {
                     ))
                 }
 
-                Row(horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = GlanceModifier.padding(4.dp).defaultWeight()) {
+                Row(
+                    modifier = GlanceModifier
+                        .defaultWeight()
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Button(
                         text = "On",
+                        modifier = GlanceModifier
+                            .defaultWeight()
+                            .fillMaxHeight(),
                         onClick = actionRunCallback<TurnLightOnAction>(
                             actionParametersOf(
                                 LightIpKey to lightObject.ip
@@ -79,10 +88,15 @@ fun WidgetComposable(lightObject: LightObject) {
                         )
                     )
 
-                    Spacer(modifier = GlanceModifier.padding(4.dp))
+                    Spacer(
+                        modifier = GlanceModifier.width(8.dp)
+                    )
 
                     Button(
                         text = "Off",
+                        modifier = GlanceModifier
+                            .defaultWeight()
+                            .fillMaxHeight(),
                         onClick = actionRunCallback<TurnLightOffAction>(
                             actionParametersOf(
                                 LightIpKey to lightObject.ip
